@@ -151,8 +151,7 @@ def logs_for(fault: str, root: str, t0: int, m: dict, rng: np.random.Generator, 
         if svc == root:
             lines += [f"{min(MINUTES - 1, t0 + i):02d}m {line.format(ver=ver)}" for i, line in enumerate(ROOT_LOGS[fault])]
         elif fault == "dns_failure" and svc in APP:
-            dep = next(c for c in ["postgres-orders", "redis-cache", "postgres-catalog", "event-bus"])
-            lines.append(f"{t0:02d}m ERROR dial tcp: lookup {dep}.svc.velmora.internal: no such host")
+            lines.append(f"{t0:02d}m ERROR dial tcp: lookup postgres-orders.svc.velmora.internal: no such host")
         elif float(np.max(m[svc]["error_pct"][t0:])) > 5:
             callee = next((c for c in sorted(upstream_callee_chain(svc, root)) if c), root)
             lines.append(f"{min(MINUTES - 1, t0 + 2):02d}m ERROR upstream call to {callee} failed: timeout after 2000ms")
@@ -179,7 +178,8 @@ def make_incident(iid: str) -> dict:
     changes = []
     if fault == "bad_deploy":
         changes.append({"minute": t0 - 1, "service": root, "kind": "deploy", "detail": ver})
-    if fault == "config_error":
+    # Half of the config faults were pushed outside the change system, so no change record exists.
+    if fault == "config_error" and rng.random() < 0.5:
         changes.append({"minute": t0 - 1, "service": root, "kind": "config", "detail": "retry.max_attempts"})
     flags = {"decoy_change": bool(rng.random() < 0.5), "flapping": bool(rng.random() < 0.4),
              "silent_root": bool(rng.random() < 0.25 and fault != "dns_failure"),

@@ -1,0 +1,13 @@
+{
+ "_note": "Open models run on CPU with llama.cpp. Weights are not committed; scripts/fetch_models.sh downloads and verifies them.",
+ "gguf": [
+  {
+   "label": "gemma-4-e2b",
+   "file": "gemma-4-E2B_q4_0-it.gguf",
+   "url": "https://huggingface.co/google/gemma-4-E2B-it-qat-q4_0-gguf/resolve/675cff42a74c774d6cb76f76d8eacb49b48c9b93/gemma-4-E2B_q4_0-it.gguf",
+   "sha256": "fa401b55b07ee70a54c6dae3903c783a6e65064312529ea57175cb5f8dec6634",
+   "license": "Apache-2.0",
+   "note": "Gemma 4 E2B instruction-tuned, quantization-aware Q4_0"
+  }
+ ]
+}
