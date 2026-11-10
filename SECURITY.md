@@ -26,11 +26,8 @@ vulnerability**, when available). Please do not open a public issue. First reply
 - Model weights come from pinned revisions and are checked by SHA-256; GGUF only, never pickle files.
 - The incident suite and measured runs are checked against a hash manifest.
 
-## Not active while the repository is private
+## GitHub settings
 
-- **Code scanning (CodeQL)**: the workflow is in `.github/workflows/codeql.yml` but the job is skipped
-  while the repository is private, because code scanning needs GitHub Code Security on private
-  repositories.
-- **Branch rules** on `main` (no force-push or deletion, required CI checks) are not enforced on a
-  private repository on the current plan. They are applied once the repository is public or the plan
-  allows it.
+- **Code scanning (CodeQL)**: `.github/workflows/codeql.yml` runs on every push and pull request, and weekly.
+- **Secret scanning and push protection**, Dependabot alerts and security updates, and private vulnerability reporting are enabled.
+- **Branch rules** on `main`: no force-push or deletion, and required CI checks on pull requests (the maintainer can bypass the CI rule for direct pushes).

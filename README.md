@@ -256,7 +256,7 @@ and scoring on a CPU node that scales to zero, in Terraform and Bicep, gated off
 | CPU cluster scales to zero, max 2 nodes, no SSH, Entra only; deploy manual, OIDC, gated | `infra/`, `.github/workflows/deploy.yml` |
 | Secret scan over full history, pinned actions, Dependabot | `.github/` |
 
-While the repository is private, code scanning (CodeQL) is skipped and branch rules are not enforced;
+Code scanning (CodeQL) and branch rules on `main` (no force-push or deletion, required CI checks) are enabled;
 see [SECURITY.md](SECURITY.md). Threat model (OWASP LLM Top 10 including prompt injection through logs
 and excessive agency, STRIDE): [docs/threat-model.md](docs/threat-model.md).
 
