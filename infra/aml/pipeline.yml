@@ -19,7 +19,7 @@ jobs:
       bash scripts/fetch_models.sh
       && python scripts/build_incidents.py --check
       && rm -f data/runs/*.jsonl
-      && for c in first_alert graph_rca gemma4-e2b.oneshot gemma4-e2b.agent gemma4-e2b.hybrid;
+      && for c in first_alert graph_rca gemma4-e2b.oneshot gemma4-e2b.agent gemma4-e2b.hybrid gemma4-e2b.hybrid-injected;
          do python scripts/run_triage.py --config $c --threads 8 || exit 1; done
       && cp data/runs/*.jsonl ${{outputs.runs}}
     outputs:

@@ -17,10 +17,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from aiops.agent import CONFIGS, LIMITS, RULES, run_agent, run_hybrid, run_oneshot, run_rules  # noqa: E402
+from aiops.agent import CONFIGS, LIMITS, RULES, run_agent, run_hybrid, run_hybrid_injected, run_oneshot, run_rules  # noqa: E402
 
 RUNS = ROOT / "data" / "runs"
-MODES = {"agent": run_agent, "hybrid": run_hybrid, "oneshot": run_oneshot}
+MODES = {"agent": run_agent, "hybrid": run_hybrid, "hybrid_injected": run_hybrid_injected, "oneshot": run_oneshot}
 
 
 def incidents() -> list[dict]:

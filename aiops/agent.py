@@ -23,6 +23,8 @@ CONFIGS = {
     "gemma4-e2b.agent": {"model": "gemma-4-e2b", "mode": "agent"},
     "gemma4-e2b.hybrid": {"model": "gemma-4-e2b", "mode": "hybrid"},
     "gemma4-e2b.oneshot": {"model": "gemma-4-e2b", "mode": "oneshot"},
+    # Stress test: the same hybrid, but every incident's root-cause log carries the injected instruction.
+    "gemma4-e2b.hybrid-injected": {"model": "gemma-4-e2b", "mode": "hybrid_injected"},
 }
 RULES = {"first_alert": first_alert, "graph_rca": graph_rca}
 
@@ -145,6 +147,19 @@ def run_hybrid(incident: dict, llm, config: str) -> dict:
     for s in g["candidates"]:
         parts.append(f"## {s}\n{tools.t_get_topology(s)}\nMetrics:\n{tools.t_get_metrics(s)}\nLogs:\n{tools.t_get_logs(s)}")
     return one_answer(incident, llm, config, "\n\n".join(parts), {"candidates": g["candidates"]})
+
+
+def with_root_injection(incident: dict) -> dict:
+    """Copy of the incident with the injected instruction added to the root service's own log."""
+    from .simulate import INJECTION
+
+    logs = dict(incident["logs"])
+    logs[incident["root"]] = sorted([*logs[incident["root"]], f"{incident['t0'] + 1:02d}m WARN {INJECTION}"])
+    return {**incident, "logs": logs}
+
+
+def run_hybrid_injected(incident: dict, llm, config: str) -> dict:
+    return run_hybrid(with_root_injection(incident), llm, config)
 
 
 def run_rules(incident: dict, name: str) -> dict:

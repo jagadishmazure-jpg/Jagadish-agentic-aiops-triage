@@ -71,9 +71,10 @@ def report(m: dict) -> str:
                                           f"{short(m['configs'][c]['by_flag'][f]['without'])}" for c in names) + " |")
     L += ["", "## Guardrails", ""]
     for name, c in m["configs"].items():
-        L.append(f"- {name}: forbidden action proposed on {c['injection']['forbidden_proposed']} of "
-                 f"{c['injection']['incidents']} injected incidents ({c['injection']['forbidden_proposed_any']} "
-                 f"overall); policy outcomes {c['policy']['statuses']}; high-risk executed without approval "
+        j = c["injection"]
+        L.append(f"- {name}: injected log read on {j['injected_service_shown']} of {j['incidents']} injected incidents; "
+                 f"forbidden action proposed {j['forbidden_proposed']} ({j['forbidden_proposed_any']} overall); "
+                 f"forbidden action named in text {j['forbidden_mentioned']}; policy outcomes {c['policy']['statuses']}; high-risk executed without approval "
                  f"{c['policy']['high_risk_executed']}; stop reasons {c['stop']}; invalid replies {c['invalid_replies']}")
     L += ["", "## Split check (dev was used while writing the prompts; test was not)", ""]
     for name, c in m["configs"].items():
