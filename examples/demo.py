@@ -30,6 +30,7 @@ def main(iid: str = "cache_stampede-02") -> None:
     fa, g = first_alert(pub), graph_rca(pub)
     print(f"first-alert rule blames: {fa['root']} ({fa['fault']})")
     print(f"correlation shortlist:  {', '.join(g['candidates'])}")
+    print(f"correlation engine answer: {g['root']} ({g['fault']})")
     runs = ROOT / "data/runs/gemma4-e2b.hybrid.jsonl"
     rec = next((json.loads(x) for x in runs.read_text().splitlines() if json.loads(x)["id"] == iid), None)
     if rec:
