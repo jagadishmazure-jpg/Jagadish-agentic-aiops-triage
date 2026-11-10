@@ -57,7 +57,7 @@ def report(m: dict) -> str:
                  f"{cost.get('tool_calls_p50', '-')} |")
     L += ["", "## Paired comparisons (fully correct, same incidents, exact McNemar test)", "",
           "| Comparison | Incidents | Both | Only first | Only second | p |", "|---|---|---|---|---|---|"]
-    L += [f"| {k} | {p['n']} | {p['both']} | {p['only_first']} | {p['only_second']} | {p['mcnemar_p']} |"
+    L += [f"| {p['first']} vs {p['second']} | {p['n']} | {p['both']} | {p['only_first']} | {p['only_second']} | {p['mcnemar_p']} |"
           for k, p in m["paired"].items()]
     names = list(m["configs"])
     L += ["", "## Fully correct by fault type", "", "| Fault | " + " | ".join(names) + " |",

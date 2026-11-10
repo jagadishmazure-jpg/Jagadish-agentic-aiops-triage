@@ -23,10 +23,13 @@ ORDER = ["first_alert", "graph_rca", "gemma4-e2b.oneshot", "gemma4-e2b.agent", "
 MODE = {"first_alert": "rules", "graph_rca": "rules", "gemma4-e2b.oneshot": "llm-oneshot",
         "gemma4-e2b.agent": "llm-agent", "gemma4-e2b.hybrid": "llm-hybrid",
         "gemma4-e2b.hybrid-injected": "llm-hybrid (injection stress)", ROUTED: "derived, post-hoc"}
-PAIRS = [("gemma4-e2b.hybrid", "graph_rca"), ("gemma4-e2b.agent", "gemma4-e2b.oneshot"),
-         ("gemma4-e2b.agent", "graph_rca"), ("gemma4-e2b.hybrid", "gemma4-e2b.agent"),
-         ("graph_rca", "first_alert"), ("gemma4-e2b.hybrid", "gemma4-e2b.hybrid-injected"),
-         (ROUTED, "graph_rca")]
+PAIRS = {"hybrid_vs_graph": ("gemma4-e2b.hybrid", "graph_rca"),
+         "agent_vs_oneshot": ("gemma4-e2b.agent", "gemma4-e2b.oneshot"),
+         "agent_vs_graph": ("gemma4-e2b.agent", "graph_rca"),
+         "hybrid_vs_agent": ("gemma4-e2b.hybrid", "gemma4-e2b.agent"),
+         "graph_vs_first_alert": ("graph_rca", "first_alert"),
+         "hybrid_vs_hybrid_injected": ("gemma4-e2b.hybrid", "gemma4-e2b.hybrid-injected"),
+         "routed_vs_graph": (ROUTED, "graph_rca")}
 FLAGS = ["decoy_change", "flapping", "silent_root", "injection"]
 
 
@@ -125,7 +128,7 @@ def paired(a: dict[str, bool], b: dict[str, bool]) -> dict:
     only_a = sum(a[i] and not b[i] for i in ids)
     only_b = sum(b[i] and not a[i] for i in ids)
     return {"n": len(ids), "both": sum(a[i] and b[i] for i in ids), "only_first": only_a, "only_second": only_b,
-            "mcnemar_p": round(mcnemar_exact(only_a, only_b), 4)}
+            "mcnemar_p": float(f"{mcnemar_exact(only_a, only_b):.3g}")}
 
 
 def routed(graph: list[dict], hybrid: list[dict]) -> list[dict]:
@@ -152,7 +155,8 @@ def evaluate(data: Path = DATA) -> dict:
     names = [c for c in ORDER if c in runs] + sorted(c for c in runs if c not in ORDER)
     configs = {c: config_metrics(c, runs[c], inc) for c in names}
     full = {c: {r["id"]: score(r, inc[r["id"]])["full"] for r in runs[c]} for c in names}
-    pairs = {f"{a} vs {b}": paired(full[a], full[b]) for a, b in PAIRS if a in full and b in full}
+    pairs = {k: {"first": a, "second": b, **paired(full[a], full[b])} for k, (a, b) in PAIRS.items()
+             if a in full and b in full}
     by_fault_count: dict[str, int] = {}
     for i in incidents:
         by_fault_count[i["fault"]] = by_fault_count.get(i["fault"], 0) + 1
