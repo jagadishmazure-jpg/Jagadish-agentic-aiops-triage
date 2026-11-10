@@ -18,9 +18,6 @@ def test_parse_call_finds_the_json_after_prose_and_accepts_arguments_key():
     assert parse_call('Look first. {"tool": "get_logs", "args": {"service": "cart"}}') == ("get_logs", {"service": "cart"})
     assert parse_call('{"tool": "get_alerts", "arguments": {}}') == ("get_alerts", {})
     assert parse_call("no json here") is None and parse_call('{"tool": 3}') is None
-
-
-def test_find_json_skips_unrelated_objects():
     assert find_json('{"a": 1} then {"root_service": "dns"}', "root_service") == {"root_service": "dns"}
 
 

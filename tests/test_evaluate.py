@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from aiops.evaluate import evaluate, noise, paired, score
+from aiops.evaluate import evaluate, noise, paired, routed, score
 from aiops.metrics import mcnemar_exact, rate, wilson
 
 INC = {"id": "x", "root": "cart", "fault": "memory_leak", "flags": {}, "alerts": [], "logs": {}}
@@ -63,3 +63,14 @@ def test_evaluate_on_a_tiny_suite(tmp_path, incidents):
     (tmp_path / "runs/graph_rca.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
     m = evaluate(tmp_path)
     assert m["configs"]["graph_rca"]["full"]["k"] == 2 and m["suite"]["incidents"] == 2
+
+
+def test_routed_keeps_the_graph_service_and_uses_the_model_only_for_text_faults():
+    g = [rec(id="a", fault="config_error", action="revert_config", root="cart", seconds=0, prompt_tokens=0,
+             completion_tokens=0), rec(id="b", fault="memory_leak", root="cart")]
+    h = [rec(id="a", root="orders", fault="cert_expiry", action="rotate_certificate", seconds=5, prompt_tokens=9,
+             completion_tokens=3), rec(id="b", root="orders", fault="noisy_neighbor", seconds=5, prompt_tokens=9,
+                                       completion_tokens=3)]
+    a, b = routed(g, h)
+    assert (a["root"], a["fault"], a["model_used"]) == ("cart", "cert_expiry", True)
+    assert (b["root"], b["fault"], b["model_used"]) == ("cart", "memory_leak", False)

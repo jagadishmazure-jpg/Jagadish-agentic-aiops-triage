@@ -14,13 +14,19 @@ from .simulate import split
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
-ORDER = ["first_alert", "graph_rca", "gemma4-e2b.oneshot", "gemma4-e2b.agent", "gemma4-e2b.hybrid", "gemma4-e2b.hybrid-injected"]
+ROUTED = "routed"
+# Faults the correlation engine can only tell apart from change records or by elimination (no metric
+# signature): the model's reading of the logs decides these. Written after the hybrid run, so the
+# routed numbers are a post-hoc hypothesis, reported with the dev/test split like everything else.
+TEXT_FAULTS = {"bad_deploy", "config_error", "cert_expiry"}
+ORDER = ["first_alert", "graph_rca", "gemma4-e2b.oneshot", "gemma4-e2b.agent", "gemma4-e2b.hybrid", "gemma4-e2b.hybrid-injected", ROUTED]
 MODE = {"first_alert": "rules", "graph_rca": "rules", "gemma4-e2b.oneshot": "llm-oneshot",
         "gemma4-e2b.agent": "llm-agent", "gemma4-e2b.hybrid": "llm-hybrid",
-        "gemma4-e2b.hybrid-injected": "llm-hybrid (injection stress)"}
+        "gemma4-e2b.hybrid-injected": "llm-hybrid (injection stress)", ROUTED: "derived, post-hoc"}
 PAIRS = [("gemma4-e2b.hybrid", "graph_rca"), ("gemma4-e2b.agent", "gemma4-e2b.oneshot"),
          ("gemma4-e2b.agent", "graph_rca"), ("gemma4-e2b.hybrid", "gemma4-e2b.agent"),
-         ("graph_rca", "first_alert"), ("gemma4-e2b.hybrid", "gemma4-e2b.hybrid-injected")]
+         ("graph_rca", "first_alert"), ("gemma4-e2b.hybrid", "gemma4-e2b.hybrid-injected"),
+         (ROUTED, "graph_rca")]
 FLAGS = ["decoy_change", "flapping", "silent_root", "injection"]
 
 
@@ -84,6 +90,8 @@ def config_metrics(name: str, recs: list[dict], inc: dict[str, dict]) -> dict:
            "policy": {"statuses": dict(sorted(statuses.items())), "high_risk_executed": hi_exec},
            "stop": dict(sorted(stops.items())),
            "invalid_replies": sum(r["invalid_replies"] for r in recs)}
+    if name == ROUTED:
+        out["model_used"] = rate(sum(r["model_used"] for r in recs), n)
     if MODE.get(name, "").startswith("llm"):
         out["cost"] = {"seconds_p50": round(percentile(secs, 50), 1), "seconds_p90": round(percentile(secs, 90), 1),
                        "tool_calls_p50": round(percentile([r["tool_calls"] for r in recs], 50), 1),
@@ -120,10 +128,27 @@ def paired(a: dict[str, bool], b: dict[str, bool]) -> dict:
             "mcnemar_p": round(mcnemar_exact(only_a, only_b), 4)}
 
 
+def routed(graph: list[dict], hybrid: list[dict]) -> list[dict]:
+    """Graph engine names the service; the model names the fault only where metrics cannot."""
+    h = {r["id"]: r for r in hybrid}
+    out = []
+    for g in graph:
+        x = h.get(g["id"])
+        use = x is not None and g["fault"] in TEXT_FAULTS and x["fault"] in TEXT_FAULTS
+        src = x if use else g
+        out.append({**g, "config": ROUTED, "fault": src["fault"], "action": src["action"],
+                    "summary": x["summary"] if use else "", "raw": x["raw"] if use else "",
+                    "seconds": x["seconds"] if use else 0.0, "prompt_tokens": x["prompt_tokens"] if use else 0,
+                    "completion_tokens": x["completion_tokens"] if use else 0, "model_used": use})
+    return out
+
+
 def evaluate(data: Path = DATA) -> dict:
     incidents = load_jsonl(data / "incidents.jsonl")
     inc = {i["id"]: i for i in incidents}
     runs = {p.stem: load_jsonl(p) for p in sorted((data / "runs").glob("*.jsonl"))}
+    if "graph_rca" in runs and "gemma4-e2b.hybrid" in runs:
+        runs[ROUTED] = routed(runs["graph_rca"], runs["gemma4-e2b.hybrid"])
     names = [c for c in ORDER if c in runs] + sorted(c for c in runs if c not in ORDER)
     configs = {c: config_metrics(c, runs[c], inc) for c in names}
     full = {c: {r["id"]: score(r, inc[r["id"]])["full"] for r in runs[c]} for c in names}
