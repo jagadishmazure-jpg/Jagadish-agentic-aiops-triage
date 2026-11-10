@@ -1,0 +1,67 @@
+# Run the coding-agent evaluation on an Azure ML GPU cluster (Microsoft Foundry hub-based project).
+# WRITTEN, NOT RUN.
+#
+# GATED OFF: every job except `preflight` runs only when the repository variable DEPLOY_ENABLED is
+# 'true'. It is not set. It only runs by hand (workflow_dispatch), logs in with OIDC (no client
+# secret), and the `dev` environment should have a required reviewer. See docs/deployment.md.
+name: deploy
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_tool:
+        description: "IaC tool"
+        type: choice
+        options: [terraform, bicep]
+        default: terraform
+permissions:
+  contents: read
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report deploy gate
+        env:
+          ENABLED: ${{ vars.DEPLOY_ENABLED == 'true' }}
+        run: |
+          echo "### Deploy gate: DEPLOY_ENABLED=${ENABLED}" >> "$GITHUB_STEP_SUMMARY"
+          [[ "$ENABLED" == "true" ]] || echo "::notice::Deployment disabled; deploy job skipped."
+
+  deploy-dev:
+    needs: preflight
+    if: vars.DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: dev
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      ARM_USE_OIDC: "true"
+      ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      TOOL: ${{ inputs.deploy_tool }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+        with: { terraform_version: "1.16.4", terraform_wrapper: false }
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Provision the workspace and the scale-to-zero GPU cluster
+        run: |
+          if [[ "$TOOL" == "bicep" ]]; then
+            az group create -n rg-sweeval-dev -l eastus2
+            az deployment group create -g rg-sweeval-dev -f infra/bicep/main.bicep -p infra/bicep/main.parameters.json
+          else
+            terraform -chdir=infra/terraform init -input=false
+            terraform -chdir=infra/terraform apply -input=false -auto-approve -var-file=envs/dev.tfvars
+          fi
+      - name: Submit the eval pipeline (1 x Standard_NC4as_T4_v3 while it runs, then back to 0 nodes)
+        run: |
+          az extension add -n ml --upgrade
+          az ml job create -f infra/aml/pipeline.yml -g rg-sweeval-dev -w mlw-sweeval-dev --stream

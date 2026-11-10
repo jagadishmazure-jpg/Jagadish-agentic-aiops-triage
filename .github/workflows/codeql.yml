@@ -1,0 +1,35 @@
+# CodeQL static analysis for the Python code and for the workflow files themselves.
+# Findings appear under Security > Code scanning; they do not fail the build.
+name: codeql
+on:
+  push: { branches: [main] }
+  pull_request:
+  schedule:
+    - cron: "17 6 * * 1"
+permissions:
+  contents: read
+jobs:
+  analyze:
+    # Code scanning needs GitHub Code Security on private repositories (a paid feature). The job is
+    # skipped while the repository is private and runs again as soon as code scanning is available.
+    if: ${{ !github.event.repository.private }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read  # needed by CodeQL in private repositories
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, actions]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+          queries: security-and-quality
+      - uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          category: /language:${{ matrix.language }}

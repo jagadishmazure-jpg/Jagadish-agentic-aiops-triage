@@ -1,0 +1,40 @@
+# Azure ML pipeline (Microsoft Foundry hub-based project) for the same tuning and eval as local runs.
+# WRITTEN, NOT RUN. Submitted only by the gated deploy workflow:
+#   az ml job create -f infra/aml/pipeline.yml -g rg-prefarena-dev -w mlw-prefarena-dev
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: preference-arena-tune-and-eval
+experiment_name: preference-arena
+settings:
+  default_compute: azureml:cpu-tune
+  continue_on_step_failure: false
+jobs:
+  tune:
+    type: command
+    code: ../..
+    environment:
+      image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04:latest
+      conda_file: environment.yml
+    command: >-
+      python - <<'PY'
+      from huggingface_hub import snapshot_download
+      snapshot_download("HuggingFaceTB/SmolLM2-135M-Instruct", revision="12fd25f77366fa6b3b4b768ec3050bf629380bac",
+                        local_dir="models/smollm2-135m-instruct")
+      PY
+      && python scripts/build_dataset.py --check
+      && python scripts/tune.py
+      && cp data/generations.jsonl data/train_log.jsonl data/tune_manifest.json ${{outputs.tuned}}
+    outputs:
+      tuned:
+        type: uri_folder
+  evaluate:
+    type: command
+    code: ../..
+    environment:
+      image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04:latest
+      conda_file: environment.yml
+    inputs:
+      tuned: ${{parent.jobs.tune.outputs.tuned}}
+    command: >-
+      cp ${{inputs.tuned}}/* data/
+      && python scripts/run_eval.py --rubric-only

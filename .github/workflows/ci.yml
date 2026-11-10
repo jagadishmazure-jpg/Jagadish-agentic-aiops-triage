@@ -1,0 +1,88 @@
+# Offline CI: lint, task-suite validity, tests, eval replay and gate, documented-output drift, brand
+# check, IaC checks, secret scan. Nothing here calls Azure or downloads model weights: the agents'
+# trajectories were measured once on CPU and are committed; CI re-applies every patch and re-runs the
+# hidden tests, so every resolved/unresolved verdict is recomputed, not trusted.
+name: ci
+on:
+  push: { branches: [main] }
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with: { python-version: "3.13" }
+      - name: Install (pinned)
+        run: pip install -r requirements.txt
+      - name: Lint
+        run: ruff check .
+      - name: Every task is valid (hidden test fails on the bug, passes with the fix); data matches the manifest
+        run: |
+          python scripts/validate_tasks.py
+          python scripts/manifest.py --check
+      - name: Agent pack is valid
+        run: python scripts/pack.py --check
+      - name: Tests (offline)
+        run: python -m pytest -q
+      - name: Test count
+        run: python scripts/count_tests.py
+      - name: Eval gate (re-verify every committed patch and compare with results/)
+        run: python scripts/run_eval.py --check
+      - name: Documented output and numbers match a fresh run
+        run: |
+          python scripts/render_docs.py --check
+          python scripts/check_numbers.py
+      - name: No real brand names anywhere in the repository (no files excluded)
+        run: python scripts/check_brands.py
+
+  iac:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      STACK: infra/terraform
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+        with: { terraform_version: "1.16.4", terraform_wrapper: false }
+      - name: terraform fmt / init / validate / test (mocked providers)
+        run: |
+          terraform -chdir="$STACK" fmt -check -recursive -diff
+          terraform -chdir="$STACK" init -backend=false -input=false
+          terraform -chdir="$STACK" validate
+          terraform -chdir="$STACK" test
+      - uses: terraform-linters/setup-tflint@6ffdbaa3be476b3431f7275c26966ef32ff60337 # v6.3.2
+        with: { tflint_version: v0.64.0, github_token: "${{ github.token }}" }
+      - name: tflint
+        working-directory: ${{ env.STACK }}
+        env: { GITHUB_TOKEN: "${{ github.token }}" }
+        run: tflint --init && tflint --format compact
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with: { python-version: "3.12" }
+      - name: checkov
+        run: pip install --quiet checkov==3.3.20 && checkov -d "$STACK" --config-file .checkov.yaml
+      - name: bicep build
+        run: az bicep install && az bicep build --file infra/bicep/main.bicep --stdout > /dev/null
+
+  secrets:
+    # gitleaks over the full git history (every commit, not only the pushed range).
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { fetch-depth: 0 }
+      - name: gitleaks (full history, pinned release, checksum verified)
+        env:
+          GITLEAKS_VERSION: "8.24.3"
+          GITLEAKS_SHA256: 9991e0b2903da4c8f6122b5c3186448b927a5da4deef1fe45271c3793f4ee29c
+        run: |
+          curl -fsSL -o gl.tgz "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  gl.tgz" | sha256sum -c -
+          tar xzf gl.tgz gitleaks
+          ./gitleaks git --redact --no-banner -v .

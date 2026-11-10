@@ -1,0 +1,4 @@
+numpy==2.5.4
+pyyaml==6.0.3
+pytest==9.2.0
+ruff==0.17.4

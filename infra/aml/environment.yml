@@ -1,0 +1,11 @@
+name: preference-arena-train
+channels: [conda-forge]
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cpu
+      - numpy==2.5.4
+      - scikit-learn==1.9.1
+      - torch==2.15.0+cpu
+      - transformers==5.22.2

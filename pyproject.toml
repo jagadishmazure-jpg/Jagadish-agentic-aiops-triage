@@ -1,0 +1,30 @@
+[project]
+name = "gemma4-swe-agent-eval"
+version = "1.0.0"
+description = "Coding-agent evaluation on CPU: Gemma 4 E2B fixing planted bugs in a fictional freight codebase."
+requires-python = ">=3.12"
+license = { text = "MIT" }
+dependencies = ["numpy==2.5.4", "pyyaml==6.0.3"]
+
+[project.optional-dependencies]
+dev = ["pytest==9.2.0", "ruff==0.17.4"]
+measure = ["llama-cpp-python==0.3.36"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["sweval"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["fixtures"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "W", "I", "B", "ISC"]
+ignore = ["E741", "B905"]

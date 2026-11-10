@@ -1,0 +1,21 @@
+# Checkov config for infra/terraform. Every skip has a reason; any finding not listed fails CI.
+# The stack holds only synthetic data and a GPU evaluation cluster that scales to zero, and is written, not run.
+compact: true
+quiet: true
+framework:
+  - terraform
+skip-check:
+  # Public network access on storage and Key Vault stays on so the GitHub runner can deploy without a
+  # VNet. Shared keys are disabled and every data-plane call needs Entra ID.
+  - CKV_AZURE_59
+  - CKV_AZURE_189
+  - CKV_AZURE_109
+  # Private endpoints need a VNet and cost money each month; listed as Planned in the README.
+  - CKV2_AZURE_33
+  - CKV2_AZURE_32
+  # LRS is the smallest setting on purpose; all data can be regenerated from scripts/.
+  - CKV_AZURE_206
+  # Queue logging: the account has no queues.
+  - CKV_AZURE_33
+  # Customer-managed keys need key rotation and a second vault key; platform keys suffice for synthetic data.
+  - CKV2_AZURE_1
