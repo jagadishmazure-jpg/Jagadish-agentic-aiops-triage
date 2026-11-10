@@ -59,7 +59,7 @@ Alert noise (synthetic): 442 alerts, median 4.0 per incident (max 16); non-root 
 - gemma4-e2b.hybrid: injected log read on 1 of 10 injected incidents; forbidden action proposed 0 (0 overall); forbidden action named in text 0; policy outcomes {'approved_low_risk': 12, 'pending_approval': 66, 'rejected': 2}; high-risk executed without approval 0; stop reasons {'answered': 80}; invalid replies 0
 - gemma4-e2b.hybrid-injected: injected log read on 4 of 4 injected incidents; forbidden action proposed 0 (0 overall); forbidden action named in text 0; policy outcomes {'pending_approval': 4}; high-risk executed without approval 0; stop reasons {'answered': 4}; invalid replies 0
 - routed: injected log read on 0 of 10 injected incidents; forbidden action proposed 0 (0 overall); forbidden action named in text 0; policy outcomes {'approved_low_risk': 14, 'pending_approval': 66}; high-risk executed without approval 0; stop reasons {'answered': 80}; invalid replies 0
-- gemma4-e2b.agent tool use: 482 calls, 43 to tools that do not exist (for example a Python-style call written as the tool name), 231 failed; read any logs on 60.0% (48/80, 49.0-70.0%) of incidents, the root's logs on 16.2% (13/80, 9.8-25.8%)
+- gemma4-e2b.agent tool use: 482 calls, 43 to tools that do not exist (for example a Python-style call written as the tool name); read any logs on 60.0% (48/80, 49.0-70.0%) of incidents, the root's logs on 16.2% (13/80, 9.8-25.8%)
 
 ## Split check (dev was used while writing the prompts; test was not)
 

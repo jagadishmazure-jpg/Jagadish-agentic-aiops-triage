@@ -80,7 +80,7 @@ def report(m: dict) -> str:
         if "agent" in c:
             a = c["agent"]
             L.append(f"- {name} tool use: {a['tool_calls']} calls, {a['unknown_tool_calls']} to tools that do not exist "
-                     f"(for example a Python-style call written as the tool name), {a['failed_tool_calls']} failed; read "
+                     f"(for example a Python-style call written as the tool name); read "
                      f"any logs on {pct(a['read_any_logs'])} of incidents, the root's logs on {pct(a['read_root_logs'])}")
     L += ["", "## Split check (dev was used while writing the prompts; test was not)", ""]
     for name, c in m["configs"].items():

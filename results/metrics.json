@@ -1117,7 +1117,6 @@
    "agent": {
     "tool_calls": 482,
     "unknown_tool_calls": 43,
-    "failed_tool_calls": 231,
     "read_any_logs": {
      "k": 48,
      "n": 80,

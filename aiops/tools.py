@@ -29,7 +29,8 @@ class IncidentTools:
                 out = fn(**args) if fn else {"error": f"unknown tool {tool!r}"}
             except TypeError as e:
                 out = {"error": f"bad arguments: {e}"}
-        self.log.append({"tool": tool, "args": {k: str(v)[:80] for k, v in args.items()}, "ok": "error" not in out})
+        ok = not (isinstance(out, dict) and "error" in out)
+        self.log.append({"tool": tool, "args": {k: str(v)[:80] for k, v in args.items()}, "ok": ok})
         return cap(json.dumps(out) if not isinstance(out, str) else out)
 
     def _svc(self, service: str) -> str:
