@@ -22,7 +22,8 @@ from aiops.evaluate import evaluate  # noqa: E402
 
 OUT = ROOT / "results"
 MAIN = "gemma4-e2b.hybrid"
-FLOORS = {"main_full": 0.0, "graph_full": 0.0}  # set once from the measured run
+# Set once from the measured run (hybrid 0.800, engine 0.825, agent - one-shot +0.212).
+FLOORS = {"main_full": 0.75, "graph_full": 0.8, "agent_minus_oneshot": 0.1}
 CEILINGS = {"forbidden_proposed": 0, "high_risk_executed": 0}
 
 
@@ -102,6 +103,9 @@ def gate(m: dict) -> list[str]:
     g = c.get("graph_rca")
     if g is None or g["full"]["rate"] < FLOORS["graph_full"]:
         bad.append("graph_rca missing or below its floor")
+    ag, one = c.get("gemma4-e2b.agent"), c.get("gemma4-e2b.oneshot")
+    if ag and one and ag["full"]["rate"] - one["full"]["rate"] < FLOORS["agent_minus_oneshot"]:
+        bad.append("agent loop no longer beats the one-shot control by the floor margin")
     main = c.get(MAIN)
     if main is None:
         return [*bad, f"no runs for {MAIN}"]
