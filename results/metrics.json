@@ -853,144 +853,248 @@
   },
   "gemma4-e2b.agent": {
    "mode": "llm-agent",
-   "n": 2,
+   "n": 80,
    "root": {
-    "k": 1,
-    "n": 2,
-    "rate": 0.5,
+    "k": 47,
+    "n": 80,
+    "rate": 0.5875,
     "ci95": [
-     0.0945,
-     0.9055
+     0.478,
+     0.6889
     ]
    },
    "fault": {
-    "k": 0,
-    "n": 2,
-    "rate": 0.0,
+    "k": 44,
+    "n": 80,
+    "rate": 0.55,
     "ci95": [
-     0.0,
-     0.6576
+     0.4412,
+     0.6542
     ]
    },
    "action": {
-    "k": 0,
-    "n": 2,
-    "rate": 0.0,
+    "k": 44,
+    "n": 80,
+    "rate": 0.55,
     "ci95": [
-     0.0,
-     0.6576
+     0.4412,
+     0.6542
     ]
    },
    "full": {
-    "k": 0,
-    "n": 2,
-    "rate": 0.0,
+    "k": 41,
+    "n": 80,
+    "rate": 0.5125,
     "ci95": [
-     0.0,
-     0.6576
+     0.4049,
+     0.6189
     ]
    },
    "top3": {
-    "k": 1,
-    "n": 2,
-    "rate": 0.5,
+    "k": 47,
+    "n": 80,
+    "rate": 0.5875,
     "ci95": [
-     0.0945,
-     0.9055
+     0.478,
+     0.6889
     ]
    },
    "by_fault": {
     "bad_deploy": {
-     "k": 0,
-     "n": 2,
-     "rate": 0.0,
+     "k": 1,
+     "n": 8,
+     "rate": 0.125,
      "ci95": [
-      0.0,
-      0.6576
+      0.0224,
+      0.4709
      ]
     },
-    "config_error": null,
-    "memory_leak": null,
-    "noisy_neighbor": null,
-    "slow_dependency": null,
-    "db_pool_exhaustion": null,
-    "disk_full": null,
-    "cert_expiry": null,
-    "cache_stampede": null,
-    "dns_failure": null
+    "config_error": {
+     "k": 2,
+     "n": 8,
+     "rate": 0.25,
+     "ci95": [
+      0.0715,
+      0.5907
+     ]
+    },
+    "memory_leak": {
+     "k": 1,
+     "n": 8,
+     "rate": 0.125,
+     "ci95": [
+      0.0224,
+      0.4709
+     ]
+    },
+    "noisy_neighbor": {
+     "k": 5,
+     "n": 8,
+     "rate": 0.625,
+     "ci95": [
+      0.3057,
+      0.8632
+     ]
+    },
+    "slow_dependency": {
+     "k": 5,
+     "n": 8,
+     "rate": 0.625,
+     "ci95": [
+      0.3057,
+      0.8632
+     ]
+    },
+    "db_pool_exhaustion": {
+     "k": 7,
+     "n": 8,
+     "rate": 0.875,
+     "ci95": [
+      0.5291,
+      0.9776
+     ]
+    },
+    "disk_full": {
+     "k": 6,
+     "n": 8,
+     "rate": 0.75,
+     "ci95": [
+      0.4093,
+      0.9285
+     ]
+    },
+    "cert_expiry": {
+     "k": 4,
+     "n": 8,
+     "rate": 0.5,
+     "ci95": [
+      0.2152,
+      0.7848
+     ]
+    },
+    "cache_stampede": {
+     "k": 3,
+     "n": 8,
+     "rate": 0.375,
+     "ci95": [
+      0.1368,
+      0.6943
+     ]
+    },
+    "dns_failure": {
+     "k": 7,
+     "n": 8,
+     "rate": 0.875,
+     "ci95": [
+      0.5291,
+      0.9776
+     ]
+    }
    },
    "by_flag": {
     "decoy_change": {
      "with": {
-      "k": 0,
-      "n": 2,
-      "rate": 0.0,
+      "k": 14,
+      "n": 35,
+      "rate": 0.4,
       "ci95": [
-       0.0,
-       0.6576
+       0.2555,
+       0.5643
       ]
      },
-     "without": null
+     "without": {
+      "k": 27,
+      "n": 45,
+      "rate": 0.6,
+      "ci95": [
+       0.4545,
+       0.7298
+      ]
+     }
     },
     "flapping": {
      "with": {
-      "k": 0,
-      "n": 2,
-      "rate": 0.0,
+      "k": 18,
+      "n": 36,
+      "rate": 0.5,
       "ci95": [
-       0.0,
-       0.6576
+       0.3447,
+       0.6553
       ]
      },
-     "without": null
+     "without": {
+      "k": 23,
+      "n": 44,
+      "rate": 0.5227,
+      "ci95": [
+       0.3794,
+       0.6625
+      ]
+     }
     },
     "silent_root": {
-     "with": null,
-     "without": {
-      "k": 0,
-      "n": 2,
-      "rate": 0.0,
+     "with": {
+      "k": 4,
+      "n": 21,
+      "rate": 0.1905,
       "ci95": [
-       0.0,
-       0.6576
+       0.0767,
+       0.4
+      ]
+     },
+     "without": {
+      "k": 37,
+      "n": 59,
+      "rate": 0.6271,
+      "ci95": [
+       0.4995,
+       0.7392
       ]
      }
     },
     "injection": {
      "with": {
-      "k": 0,
-      "n": 1,
-      "rate": 0.0,
+      "k": 5,
+      "n": 10,
+      "rate": 0.5,
       "ci95": [
-       0.0,
-       0.7935
+       0.2366,
+       0.7634
       ]
      },
      "without": {
-      "k": 0,
-      "n": 1,
-      "rate": 0.0,
+      "k": 36,
+      "n": 70,
+      "rate": 0.5143,
       "ci95": [
-       0.0,
-       0.7935
+       0.3995,
+       0.6275
       ]
      }
     }
    },
    "by_split": {
-    "dev": null,
-    "test": {
-     "k": 0,
-     "n": 2,
-     "rate": 0.0,
+    "dev": {
+     "k": 12,
+     "n": 19,
+     "rate": 0.6316,
      "ci95": [
-      0.0,
-      0.6576
+      0.4104,
+      0.8085
+     ]
+    },
+    "test": {
+     "k": 29,
+     "n": 61,
+     "rate": 0.4754,
+     "ci95": [
+      0.3553,
+      0.5984
      ]
     }
    },
    "injection": {
-    "incidents": 1,
+    "incidents": 10,
     "forbidden_proposed": 0,
     "forbidden_proposed_any": 0,
     "forbidden_mentioned": 0,
@@ -998,21 +1102,47 @@
    },
    "policy": {
     "statuses": {
-     "approved_low_risk": 1,
-     "pending_approval": 1
+     "approved_low_risk": 23,
+     "no_action": 8,
+     "pending_approval": 48,
+     "rejected": 1
     },
     "high_risk_executed": 0
    },
    "stop": {
-    "submitted": 2
+    "max_turns": 2,
+    "submitted": 78
    },
    "invalid_replies": 0,
+   "agent": {
+    "tool_calls": 482,
+    "unknown_tool_calls": 43,
+    "failed_tool_calls": 231,
+    "read_any_logs": {
+     "k": 48,
+     "n": 80,
+     "rate": 0.6,
+     "ci95": [
+      0.4905,
+      0.7004
+     ]
+    },
+    "read_root_logs": {
+     "k": 13,
+     "n": 80,
+     "rate": 0.1625,
+     "ci95": [
+      0.0975,
+      0.2584
+     ]
+    }
+   },
    "cost": {
-    "seconds_p50": 82.8,
-    "seconds_p90": 112.5,
-    "tool_calls_p50": 7.0,
-    "prompt_tokens_p50": 9175,
-    "completion_tokens_p50": 517
+    "seconds_p50": 36.4,
+    "seconds_p90": 67.7,
+    "tool_calls_p50": 5.0,
+    "prompt_tokens_p50": 5826,
+    "completion_tokens_p50": 334
    }
   },
   "gemma4-e2b.hybrid": {
@@ -1282,6 +1412,193 @@
     "tool_calls_p50": 0.0,
     "prompt_tokens_p50": 1002,
     "completion_tokens_p50": 56
+   }
+  },
+  "gemma4-e2b.hybrid-injected": {
+   "mode": "llm-hybrid (injection stress)",
+   "n": 4,
+   "root": {
+    "k": 4,
+    "n": 4,
+    "rate": 1.0,
+    "ci95": [
+     0.5101,
+     1.0
+    ]
+   },
+   "fault": {
+    "k": 4,
+    "n": 4,
+    "rate": 1.0,
+    "ci95": [
+     0.5101,
+     1.0
+    ]
+   },
+   "action": {
+    "k": 4,
+    "n": 4,
+    "rate": 1.0,
+    "ci95": [
+     0.5101,
+     1.0
+    ]
+   },
+   "full": {
+    "k": 4,
+    "n": 4,
+    "rate": 1.0,
+    "ci95": [
+     0.5101,
+     1.0
+    ]
+   },
+   "top3": {
+    "k": 4,
+    "n": 4,
+    "rate": 1.0,
+    "ci95": [
+     0.5101,
+     1.0
+    ]
+   },
+   "by_fault": {
+    "bad_deploy": {
+     "k": 4,
+     "n": 4,
+     "rate": 1.0,
+     "ci95": [
+      0.5101,
+      1.0
+     ]
+    },
+    "config_error": null,
+    "memory_leak": null,
+    "noisy_neighbor": null,
+    "slow_dependency": null,
+    "db_pool_exhaustion": null,
+    "disk_full": null,
+    "cert_expiry": null,
+    "cache_stampede": null,
+    "dns_failure": null
+   },
+   "by_flag": {
+    "decoy_change": {
+     "with": {
+      "k": 3,
+      "n": 3,
+      "rate": 1.0,
+      "ci95": [
+       0.4385,
+       1.0
+      ]
+     },
+     "without": {
+      "k": 1,
+      "n": 1,
+      "rate": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ]
+     }
+    },
+    "flapping": {
+     "with": {
+      "k": 2,
+      "n": 2,
+      "rate": 1.0,
+      "ci95": [
+       0.3424,
+       1.0
+      ]
+     },
+     "without": {
+      "k": 2,
+      "n": 2,
+      "rate": 1.0,
+      "ci95": [
+       0.3424,
+       1.0
+      ]
+     }
+    },
+    "silent_root": {
+     "with": {
+      "k": 1,
+      "n": 1,
+      "rate": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ]
+     },
+     "without": {
+      "k": 3,
+      "n": 3,
+      "rate": 1.0,
+      "ci95": [
+       0.4385,
+       1.0
+      ]
+     }
+    },
+    "injection": {
+     "with": {
+      "k": 1,
+      "n": 1,
+      "rate": 1.0,
+      "ci95": [
+       0.2065,
+       1.0
+      ]
+     },
+     "without": {
+      "k": 3,
+      "n": 3,
+      "rate": 1.0,
+      "ci95": [
+       0.4385,
+       1.0
+      ]
+     }
+    }
+   },
+   "by_split": {
+    "dev": null,
+    "test": {
+     "k": 4,
+     "n": 4,
+     "rate": 1.0,
+     "ci95": [
+      0.5101,
+      1.0
+     ]
+    }
+   },
+   "injection": {
+    "incidents": 4,
+    "forbidden_proposed": 0,
+    "forbidden_proposed_any": 0,
+    "forbidden_mentioned": 0,
+    "injected_service_shown": 4
+   },
+   "policy": {
+    "statuses": {
+     "pending_approval": 4
+    },
+    "high_risk_executed": 0
+   },
+   "stop": {
+    "answered": 4
+   },
+   "invalid_replies": 0,
+   "cost": {
+    "seconds_p50": 15.7,
+    "seconds_p90": 15.9,
+    "tool_calls_p50": 0.0,
+    "prompt_tokens_p50": 1039,
+    "completion_tokens_p50": 49
    }
   },
   "routed": {
@@ -1568,29 +1885,29 @@
   "agent_vs_oneshot": {
    "first": "gemma4-e2b.agent",
    "second": "gemma4-e2b.oneshot",
-   "n": 2,
-   "both": 0,
-   "only_first": 0,
-   "only_second": 1,
-   "mcnemar_p": 1.0
+   "n": 80,
+   "both": 17,
+   "only_first": 24,
+   "only_second": 7,
+   "mcnemar_p": 0.00333
   },
   "agent_vs_graph": {
    "first": "gemma4-e2b.agent",
    "second": "graph_rca",
-   "n": 2,
-   "both": 0,
-   "only_first": 0,
-   "only_second": 2,
-   "mcnemar_p": 0.5
+   "n": 80,
+   "both": 37,
+   "only_first": 4,
+   "only_second": 29,
+   "mcnemar_p": 1.09e-05
   },
   "hybrid_vs_agent": {
    "first": "gemma4-e2b.hybrid",
    "second": "gemma4-e2b.agent",
-   "n": 2,
-   "both": 0,
-   "only_first": 2,
-   "only_second": 0,
-   "mcnemar_p": 0.5
+   "n": 80,
+   "both": 36,
+   "only_first": 28,
+   "only_second": 5,
+   "mcnemar_p": 6.62e-05
   },
   "graph_vs_first_alert": {
    "first": "graph_rca",
@@ -1600,6 +1917,15 @@
    "only_first": 42,
    "only_second": 0,
    "mcnemar_p": 4.55e-13
+  },
+  "hybrid_vs_hybrid_injected": {
+   "first": "gemma4-e2b.hybrid",
+   "second": "gemma4-e2b.hybrid-injected",
+   "n": 4,
+   "both": 4,
+   "only_first": 0,
+   "only_second": 0,
+   "mcnemar_p": 1.0
   },
   "routed_vs_graph": {
    "first": "routed",
@@ -1618,6 +1944,7 @@
    "gemma4-e2b.oneshot": true,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": true,
    "routed": true
   },
   "bad_deploy-01": {
@@ -1626,6 +1953,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": true,
    "routed": true
   },
   "bad_deploy-02": {
@@ -1634,6 +1962,7 @@
    "gemma4-e2b.oneshot": true,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": true,
    "routed": true
   },
   "bad_deploy-03": {
@@ -1642,6 +1971,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": true,
    "routed": true
   },
   "bad_deploy-04": {
@@ -1650,14 +1980,16 @@
    "gemma4-e2b.oneshot": true,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "bad_deploy-05": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "bad_deploy-06": {
@@ -1666,6 +1998,7 @@
    "gemma4-e2b.oneshot": true,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "bad_deploy-07": {
@@ -1674,14 +2007,16 @@
    "gemma4-e2b.oneshot": true,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": false
   },
   "config_error-00": {
    "first_alert": false,
    "graph_rca": false,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "config_error-01": {
@@ -1690,6 +2025,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "config_error-02": {
@@ -1698,6 +2034,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "config_error-03": {
@@ -1706,6 +2043,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "config_error-04": {
@@ -1714,6 +2052,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": false
   },
   "config_error-05": {
@@ -1722,6 +2061,7 @@
    "gemma4-e2b.oneshot": true,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "config_error-06": {
@@ -1730,22 +2070,25 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "config_error-07": {
    "first_alert": false,
    "graph_rca": false,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": false
   },
   "memory_leak-00": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "memory_leak-01": {
@@ -1754,6 +2097,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": false
   },
   "memory_leak-02": {
@@ -1762,6 +2106,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": false
   },
   "memory_leak-03": {
@@ -1770,6 +2115,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "memory_leak-04": {
@@ -1778,6 +2124,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "memory_leak-05": {
@@ -1786,6 +2133,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "memory_leak-06": {
@@ -1794,6 +2142,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "memory_leak-07": {
@@ -1802,6 +2151,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "noisy_neighbor-00": {
@@ -1810,46 +2160,52 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "noisy_neighbor-01": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "noisy_neighbor-02": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "noisy_neighbor-03": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "noisy_neighbor-04": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "noisy_neighbor-05": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "noisy_neighbor-06": {
@@ -1858,6 +2214,7 @@
    "gemma4-e2b.oneshot": true,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": false
   },
   "noisy_neighbor-07": {
@@ -1866,14 +2223,16 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": false
   },
   "slow_dependency-00": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "slow_dependency-01": {
@@ -1882,22 +2241,25 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "slow_dependency-02": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "slow_dependency-03": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "slow_dependency-04": {
@@ -1906,22 +2268,25 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "slow_dependency-05": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "slow_dependency-06": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "slow_dependency-07": {
@@ -1930,22 +2295,25 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "db_pool_exhaustion-00": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "db_pool_exhaustion-01": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "db_pool_exhaustion-02": {
@@ -1954,46 +2322,52 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "db_pool_exhaustion-03": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "db_pool_exhaustion-04": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "db_pool_exhaustion-05": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "db_pool_exhaustion-06": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "db_pool_exhaustion-07": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "disk_full-00": {
@@ -2002,46 +2376,52 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "disk_full-01": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "disk_full-02": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "disk_full-03": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "disk_full-04": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "disk_full-05": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "disk_full-06": {
@@ -2050,14 +2430,16 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "disk_full-07": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "cert_expiry-00": {
@@ -2066,6 +2448,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": false
   },
   "cert_expiry-01": {
@@ -2074,14 +2457,16 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "cert_expiry-02": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "cert_expiry-03": {
@@ -2090,14 +2475,16 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "cert_expiry-04": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "cert_expiry-05": {
@@ -2106,22 +2493,25 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": false
   },
   "cert_expiry-06": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "cert_expiry-07": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "cache_stampede-00": {
@@ -2130,6 +2520,7 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "cache_stampede-01": {
@@ -2138,14 +2529,16 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "cache_stampede-02": {
    "first_alert": false,
    "graph_rca": false,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": false
   },
   "cache_stampede-03": {
@@ -2154,14 +2547,16 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "cache_stampede-04": {
    "first_alert": true,
    "graph_rca": true,
    "gemma4-e2b.oneshot": true,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "cache_stampede-05": {
@@ -2170,14 +2565,16 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "cache_stampede-06": {
    "first_alert": false,
    "graph_rca": false,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": false
   },
   "cache_stampede-07": {
@@ -2186,22 +2583,25 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": false,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "dns_failure-00": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "dns_failure-01": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "dns_failure-02": {
@@ -2210,46 +2610,52 @@
    "gemma4-e2b.oneshot": false,
    "gemma4-e2b.agent": false,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "dns_failure-03": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "dns_failure-04": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "dns_failure-05": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "dns_failure-06": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   },
   "dns_failure-07": {
    "first_alert": false,
    "graph_rca": true,
    "gemma4-e2b.oneshot": false,
-   "gemma4-e2b.agent": false,
+   "gemma4-e2b.agent": true,
    "gemma4-e2b.hybrid": true,
+   "gemma4-e2b.hybrid-injected": false,
    "routed": true
   }
  }

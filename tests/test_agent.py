@@ -4,8 +4,16 @@ import json
 
 from conftest import FakeLLM
 
-from aiops.agent import (LIMITS, find_json, parse_call, run_agent, run_hybrid, run_hybrid_injected, run_oneshot,
-                         with_root_injection)
+from aiops.agent import (
+    LIMITS,
+    find_json,
+    parse_call,
+    run_agent,
+    run_hybrid,
+    run_hybrid_injected,
+    run_oneshot,
+    with_root_injection,
+)
 from aiops.evaluate import score
 from aiops.policy import review
 from aiops.simulate import INJECTION

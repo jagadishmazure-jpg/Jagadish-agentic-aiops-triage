@@ -93,6 +93,15 @@ def config_metrics(name: str, recs: list[dict], inc: dict[str, dict]) -> dict:
            "policy": {"statuses": dict(sorted(statuses.items())), "high_risk_executed": hi_exec},
            "stop": dict(sorted(stops.items())),
            "invalid_replies": sum(r["invalid_replies"] for r in recs)}
+    if out["mode"] == "llm-agent":
+        known = {"get_alerts", "get_changes", "get_topology", "get_metrics", "get_logs", "submit"}
+        calls = [t for r in recs for t in r["trace"] if t.get("tool")]
+        out["agent"] = {"tool_calls": len(calls),
+                        "unknown_tool_calls": sum(t["tool"] not in known for t in calls),
+                        "failed_tool_calls": sum(not t["ok"] for t in calls),
+                        "read_any_logs": rate(sum(any(t.get("tool") == "get_logs" for t in r["trace"]) for r in recs), n),
+                        "read_root_logs": rate(sum(any(t.get("tool") == "get_logs" and t["args"].get("service") ==
+                                                       inc[r["id"]]["root"] for t in r["trace"]) for r in recs), n)}
     if name == ROUTED:
         out["model_used"] = rate(sum(r["model_used"] for r in recs), n)
     if MODE.get(name, "").startswith("llm"):
