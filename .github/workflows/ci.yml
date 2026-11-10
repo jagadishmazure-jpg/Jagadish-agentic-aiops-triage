@@ -1,7 +1,7 @@
-# Offline CI: lint, task-suite validity, tests, eval replay and gate, documented-output drift, brand
-# check, IaC checks, secret scan. Nothing here calls Azure or downloads model weights: the agents'
-# trajectories were measured once on CPU and are committed; CI re-applies every patch and re-runs the
-# hidden tests, so every resolved/unresolved verdict is recomputed, not trusted.
+# Offline CI: lint, incident-suite rebuild, tests, eval replay and gate, documented-output drift, brand
+# check, IaC checks, secret scan. Nothing here calls Azure or downloads model weights: the triage runs
+# were measured once on CPU and are committed; CI rebuilds the incidents from the simulator and re-scores
+# every answer against ground truth, so every number is recomputed, not trusted.
 name: ci
 on:
   push: { branches: [main] }
@@ -23,17 +23,15 @@ jobs:
         run: pip install -r requirements.txt
       - name: Lint
         run: ruff check .
-      - name: Every task is valid (hidden test fails on the bug, passes with the fix); data matches the manifest
+      - name: Incidents match a fresh simulator build; data matches the manifest
         run: |
-          python scripts/validate_tasks.py
+          python scripts/build_incidents.py --check
           python scripts/manifest.py --check
-      - name: Agent pack is valid
-        run: python scripts/pack.py --check
       - name: Tests (offline)
         run: python -m pytest -q
       - name: Test count
         run: python scripts/count_tests.py
-      - name: Eval gate (re-verify every committed patch and compare with results/)
+      - name: Eval gate (re-score every committed answer and compare with results/)
         run: python scripts/run_eval.py --check
       - name: Documented output and numbers match a fresh run
         run: |

@@ -1,5 +1,5 @@
 # Checkov config for infra/terraform. Every skip has a reason; any finding not listed fails CI.
-# The stack holds only synthetic data and a GPU evaluation cluster that scales to zero, and is written, not run.
+# The stack holds only synthetic data and a CPU evaluation cluster that scales to zero, and is written, not run.
 compact: true
 quiet: true
 framework:

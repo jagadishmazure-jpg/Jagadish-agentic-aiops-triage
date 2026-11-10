@@ -1,4 +1,4 @@
-# Run the coding-agent evaluation on an Azure ML GPU cluster (Microsoft Foundry hub-based project).
+# Run the AIOps triage evaluation on an Azure ML CPU cluster (Microsoft Foundry hub-based project).
 # WRITTEN, NOT RUN.
 #
 # GATED OFF: every job except `preflight` runs only when the repository variable DEPLOY_ENABLED is
@@ -52,16 +52,16 @@ jobs:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-      - name: Provision the workspace and the scale-to-zero GPU cluster
+      - name: Provision the workspace and the scale-to-zero CPU cluster
         run: |
           if [[ "$TOOL" == "bicep" ]]; then
-            az group create -n rg-sweeval-dev -l eastus2
-            az deployment group create -g rg-sweeval-dev -f infra/bicep/main.bicep -p infra/bicep/main.parameters.json
+            az group create -n rg-aiops-dev -l eastus2
+            az deployment group create -g rg-aiops-dev -f infra/bicep/main.bicep -p infra/bicep/main.parameters.json
           else
             terraform -chdir=infra/terraform init -input=false
             terraform -chdir=infra/terraform apply -input=false -auto-approve -var-file=envs/dev.tfvars
           fi
-      - name: Submit the eval pipeline (1 x Standard_NC4as_T4_v3 while it runs, then back to 0 nodes)
+      - name: Submit the eval pipeline (1 x Standard_D8s_v5 while it runs, then back to 0 nodes)
         run: |
           az extension add -n ml --upgrade
-          az ml job create -f infra/aml/pipeline.yml -g rg-sweeval-dev -w mlw-sweeval-dev --stream
+          az ml job create -f infra/aml/pipeline.yml -g rg-aiops-dev -w mlw-aiops-dev --stream

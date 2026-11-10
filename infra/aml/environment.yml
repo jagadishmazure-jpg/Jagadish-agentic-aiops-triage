@@ -1,11 +1,9 @@
-name: preference-arena-train
+name: aiops-triage
 channels: [conda-forge]
 dependencies:
   - python=3.12
   - pip
   - pip:
-      - --extra-index-url https://download.pytorch.org/whl/cpu
       - numpy==2.5.4
-      - scikit-learn==1.9.1
-      - torch==2.15.0+cpu
-      - transformers==5.22.2
+      - pyyaml==6.0.3
+      - llama-cpp-python==0.3.36
